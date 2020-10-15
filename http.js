@@ -1,7 +1,7 @@
 
 module.exports = (options) => {
     
-    const config = { timeout: 18000 }
+    const config = { timeout: 72000 }
     if(options) Object.assign(config, options)
     const http = require('axios').create(config)
 
@@ -14,6 +14,8 @@ module.exports = (options) => {
     })
     
     http.interceptors.response.use(response => {
+        if(response.data.isCargo) return response.data ? 
+            response.data.payload : null
         return response
     }, error =>{
         console.log({'@response:': error.response})
