@@ -1,0 +1,25 @@
+{
+  "name": "meta-agent",
+  "version": "0.0.0",
+  "description": "metadata api fetcher",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chen7david/meta-agent.git"
+  },
+  "keywords": [
+    "metadata"
+  ],
+  "author": "David M.Chen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chen7david/meta-agent/issues"
+  },
+  "homepage": "https://github.com/chen7david/meta-agent#readme",
+  "dependencies": {
+    "axios": "^0.20.0"
+  }
+}
