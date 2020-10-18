@@ -1,6 +1,6 @@
 {
   "name": "meta-agent",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "metadata api fetcher",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,5 @@
     "url": "https://github.com/chen7david/meta-agent/issues"
   },
   "homepage": "https://github.com/chen7david/meta-agent#readme",
-  "dependencies": {
-    "axios": "^0.20.0"
-  }
+  "dependencies": {}
 }
