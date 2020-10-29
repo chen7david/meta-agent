@@ -70,6 +70,11 @@ class Meta {
         return await this.get()
     }
 
+    fixdata(){
+        this.state.bits.push('fix-metadata')
+        return await this.get()
+    }
+
     async get(){
         return await this.http.get(this.url())
     }
