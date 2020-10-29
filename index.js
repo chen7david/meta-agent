@@ -65,7 +65,7 @@ class Meta {
     }
 
     async search(name, params = {}){
-        params.name = name
+        params.search = name
         Object.assign(this.state.params, params)
         return await this.get()
     }
