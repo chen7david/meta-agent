@@ -34,6 +34,6 @@ const someAsyncFunction = async () => {
     const allShowGenres = await meta.shows().genres()
     const allGenres = await meta.genres({type: 'all'})
 
-    const cacheAllMissingCoverArt = await meta.genres({type: 'all'})
+    const cacheAllMissingCoverArt = await meta.fixdata({type: 'all'})
 }
 ```
