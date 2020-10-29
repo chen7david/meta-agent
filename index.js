@@ -1,5 +1,4 @@
 
-
 class Meta {
     constructor(options){
         this.http = require('./http')(options)
