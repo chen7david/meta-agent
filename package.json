@@ -1,6 +1,6 @@
 {
   "name": "meta-agent",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "metadata api fetcher",
   "main": "index.js",
   "scripts": {
