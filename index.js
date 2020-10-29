@@ -3,92 +3,89 @@
 class Meta {
     constructor(options){
         this.http = require('./http')(options)
-        this.state = { url: '', params: {}}
+        this.state = {bits:[], params:{}}
+    }
+
+    clearState(){
+        this.state = {bits:[], params:{}}
+    }
+
+    url(){
+        const {source, bits, params} = this.state
+        let url = bits.filter(e => e).join('/')
+        if(source) url = [source, url].join('-')
+        const qString = this.toQueryString(params)
+        if(qString) url = [url, qString].join('?')
+        this.clearState()
+        return '/' + url
     }
 
     tmdb(){
-        if(this.state.url.length > 0) throw(`tmdb() should be called first in the chain`)
-        this.state.url = '/tmdb-'
+        this.state.source = 'tmdb'
         return this
     }
 
     movies(){
-        this.state.url += this.state.url.length > 0 ? 'movies' : '/movies'
+        this.state.bits.push('movies')
         return this
     }
 
     shows(){
-        this.state.url += this.state.url.length > 0 ? 'shows' : '/shows'
+        this.state.bits.push('shows')
         return this
     }
 
     people(){
-        this.state.url += this.state.url.length > 0 ? 'people' : '/people'
+        this.state.bits.push('people')
         return this
     }
 
-    async import(id){
-        if(!id) throw(`id should be an integer ${id} was given`)
-        this.state.url += '/' + id
-        let url = this.state.url
-        this.resetState()
-        return await this.http.get(url)
+    season(id){
+        this.state.bits.push('season')
+        this.state.bits.push(id)
+        return this
     }
 
-    async update(id, season){
-        if(!id || !season) throw(`invalid parameter value(s)`)
-        this.state.url += `/${id}/season/${season}`
-        let url = this.state.url
-        this.resetState()
-        return await this.http.patch(url)
-    }
-
-    async search(name, params = {}){
-        params.search = name
-        let url = ''.concat(this.state.url, '?', this.toQueryString(params))
-        this.resetState()
-        return await this.http.get(url)
-    }
-
-    async trending(params = {}){
-        params.type = this.state.url.split('/')[1]
-        let url = '/trending'.concat('?', this.toQueryString(params))
-        this.resetState()
-        return await this.http.get(url)
+    withId(id){
+        this.state.bits.push(id)
+        return this
     }
 
     async genres(params = {}){
-        params.type = params.type ? '' : this.state.url.split('/')[1] 
-        let url = '/genres'.concat('?', this.toQueryString(params))
-        this.resetState()
-        return await this.http.get(url)
+        params.type = this.state.bits.pop()
+        this.state.bits.push('genres')
+        Object.assign(this.state.params, params)
+        return await this.get()
     }
 
-    async withId(id, params = {}){
-        if(id == null) throw(`id is required but ${id} was given!`)
-        let url = ''.concat(this.state.url,'/', id, this.toQueryString(params))
-        this.resetState()
-        return await this.http.get(url)
+    async trending(params = {}){
+        params.type = this.state.bits.pop()
+        this.state.bits.push('trending')
+        Object.assign(this.state.params, params)
+        return await this.get()
     }
 
-    async delete(id){
-        if(id == null) throw(`id is required but ${id} was given!`)
-        let url = ''.concat(this.state.url,'/', id)
-        this.resetState()
-        return await this.http.delete(url)
+    async search(name, params = {}){
+        params.name = name
+        Object.assign(this.state.params, params)
+        return await this.get()
     }
 
-    async all(){
-        return await this.http.get(this.state.url)
+    async get(){
+        return await this.http.get(this.url())
+    }
+
+    async update(){
+        return await this.http.patch(this.url())
+    }
+
+    async delete(){
+        return await this.http.delete(this.url())
     }
 
     toQueryString(params = {}){
         return Object.keys(Object.assign(params, this.state.params))
             .map(key => key + '=' + params[key]).join('&')
-    }
-
-    resetState(){
-        this.state = { url: '', params: {}}
     }
 }
 
