@@ -70,8 +70,9 @@ class Meta {
         return await this.get()
     }
 
-    fixdata(){
+    fixdata(params = {}){
         this.state.bits.push('fix-metadata')
+        Object.assign(this.state.params, params)
         return await this.get()
     }
 
